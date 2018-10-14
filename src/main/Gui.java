@@ -3,6 +3,8 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -11,6 +13,7 @@ import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,192 +21,285 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.logging.log4j.Level;
+
 public class Gui extends JFrame{
+	//Р’С‹ Р±С‹ Р·РЅР°Р»Рё, РєР°Рє РјСѓС‚РѕСЂРЅРѕ РїРёСЃР°С‚СЊ РѕРґРёРЅ Рё С‚РѕС‚ Р¶Рµ РєРѕРґ 2 СЂР°Р·, Р±Р»Р°РіРѕ РґРµРєРѕРјРїРёР»СЏС‚РѕСЂ РїРѕРјРѕРі РЅРµРјРЅРѕРіРѕ
 	private static final long serialVersionUID = 1L;
 	private static String ls = CoHexPo.ls;
-	final JFrame frame;
-	static JPanel panel1;
-	static JPanel pbyttons;
-	static JPanel pou;
-	static JLabel ioimage;
-	static BufferedImage originalImage;
-	static JProgressBar progressBar;
-	JFileChooser fileChooser;
+	private final JFrame frame;
+	private static JPanel panel1;
+	private static JPanel pbyttons;
+	private static JPanel pou;
+	private static JLabel ioimage;
+	private static JLabel gioimage;
+	private static BufferedImage originalImage;
+	private static BufferedImage gigasreenImage;
+	private static JProgressBar progressBar;
+	private JFileChooser fileChooser;
 	
-	//Слайдеры РГБ
+	//"Р“Р°Р»РѕС‡РєРё"
+	private static JCheckBox bite0;
+	private static JCheckBox sysdecor;
+	private static JCheckBox swingdecor;
+	
+	//РЎР»Р°Р№РґРµСЂС‹ Р Р“Р‘
 	private static JSlider sbR;
 	private static JSlider sbG;
 	private static JSlider sbB;
 	
+	//РћР±РЅРѕРІР»РЅРёРµ
+	 public static boolean bite0v = true;
+	 public static boolean sysdecorv = false;
+	 public static boolean swingdecorv = false;
+	 //Р Р°Р·РјРµСЂС‹ РѕРєРЅР° РЅР°РґРѕРµР»Рѕ РјРЅРµ РїРѕСЃС‚РѕСЏРЅРЅРѕ РјРµРЅСЏС‚СЊ, С‚Р°Рє С‡С‚Рѕ РІС‹РЅРµСЃ РІ РїРµСЂРµРјРµРЅРЅСѓСЋ
+	 private int X = 515;
+	 private int Y = 435;
+	
 	public Gui(){		
-		//Конструктор? Да так веселее, нефиг писать статичный код, конструктор позволит вам купить асбестовую прокладку на стул!
-		super("У меня жопа горит");
-		//Хитрожопый режим декорации
-		JFrame.setDefaultLookAndFeelDecorated(false);
-		//Создаем фрейм
-		frame = new JFrame("Поню в ПЗУ!");
-		//и основную панель
+		//РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ? Р”Р° С‚Р°Рє РІРµСЃРµР»РµРµ, РЅРµС„РёРі РїРёСЃР°С‚СЊ СЃС‚Р°С‚РёС‡РЅС‹Р№ РєРѕРґ, РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕР·РІРѕР»РёС‚ РІР°Рј РєСѓРїРёС‚СЊ Р°СЃР±РµСЃС‚РѕРІСѓСЋ РїСЂРѕРєР»Р°РґРєСѓ РЅР° СЃС‚СѓР»!
+		super("РЈ РјРµРЅСЏ Р¶РѕРїР° РіРѕСЂРёС‚");
+		Starter.log.log(Level.INFO, "РћС‚СЂРёСЃРѕРІРєР° gui");
+		//РҐРёС‚СЂРѕР¶РѕРїС‹Р№ СЂРµР¶РёРј РґРµРєРѕСЂР°С†РёРё
+		JFrame.setDefaultLookAndFeelDecorated(swingdecorv);
+		if (sysdecorv) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {				
+				Starter.log.log(Level.ERROR, e);
+			}
+		}
+		//РЎРѕР·РґР°РµРј С„СЂРµР№Рј
+		frame = new JFrame("РџРѕРЅСЋ РІ РџР—РЈ!");
+		//РўР°Рє, РЅР°РґРѕ РёРєРѕРЅРєСѓ РґРѕР±Р°РІРёС‚СЊ!
+		Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/assets/images/ponyI.png"));
+		frame.setIconImage(image);
+		//Рё РѕСЃРЅРѕРІРЅСѓСЋ РїР°РЅРµР»СЊ
 		panel1 = new JPanel();
 		panel1.setLayout(new BorderLayout());		
-		//стандартные операции
+		//СЃС‚Р°РЅРґР°СЂС‚РЅС‹Рµ РѕРїРµСЂР°С†РёРё
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //создаём панель дял кнопок, расположение слева.
+        //СЃРѕР·РґР°С‘Рј РїР°РЅРµР»СЊ РґР»СЏ РєРЅРѕРїРѕРє, СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ СЃР»РµРІР°.
         pbyttons = new JPanel();
         pbyttons.setLayout(new FlowLayout());
-        //выводы
+        //РІС‹РІРѕРґС‹
         pou = new JPanel();
         pou.setLayout(new FlowLayout());
-        //добавим её на главную панель
-        panel1.add(pbyttons,BorderLayout.WEST );
-        panel1.add(pou,BorderLayout.CENTER );
+        //РґРѕР±Р°РІРёРј РµС‘ РЅР° РіР»Р°РІРЅСѓСЋ РїР°РЅРµР»СЊ
+        panel1.add(pbyttons,BorderLayout.WEST);
+        panel1.add(pou,BorderLayout.EAST);
         
-        
-        pbyttons.setPreferredSize(new Dimension(250,500));
-      //  pbyttons.setMinimumSize(new Dimension(50,10));
-       // pbyttons.setMaximumSize(new Dimension(200,10));
-        
-        //помещаем туда кнопки
-        final JButton button0 = new JButton("Инстркуция");
-        pbyttons.add(button0, FlowLayout.LEFT); 
-        final JButton button1 = new JButton("Открыть файл");
+        //Р Р°Р·РјРµСЂС‹ РїР°РЅРµР»РµР№
+        pbyttons.setPreferredSize(new Dimension(250, 500));
+        pou.setPreferredSize(new Dimension(250, 500));
+
+        //РїРѕРјРµС‰Р°РµРј С‚СѓРґР° РєРЅРѕРїРєРё
+        final JButton button0 = new JButton("РРЅСЃС‚СЂРєСѓС†РёСЏ");
+        pbyttons.add(button0,  FlowLayout.LEFT);
+        final JButton button1 = new JButton("РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»");
         pbyttons.add(button1,  FlowLayout.LEFT);
-        final JButton button2 = new JButton("Сохранить в byte");
-        pbyttons.add(button2, FlowLayout.LEFT);
-        final JButton button3 = new JButton("Сохранить в bin");
-        pbyttons.add(button3, FlowLayout.LEFT);        
-        final JButton button4 = new JButton("Рекурсивная обработка");
-        pbyttons.add(button4, FlowLayout.LEFT);  
-        final JButton button5 = new JButton("Преобразовать bin в png");
-        pbyttons.add(button5, FlowLayout.LEFT);
-        final JButton button6 = new JButton("Преобразовать byte в png");
-        pbyttons.add(button6, FlowLayout.TRAILING);
-        final JButton button7 = new JButton("Созранить картинку в png");
-        pbyttons.add(button7, FlowLayout.TRAILING);
-        button0.setPreferredSize(new Dimension(200,25));
-        button1.setPreferredSize(new Dimension(200,25));
-        button2.setPreferredSize(new Dimension(200,25));
-        button3.setPreferredSize(new Dimension(200,25));
-        button4.setPreferredSize(new Dimension(200,25));
-        button5.setPreferredSize(new Dimension(200,25));
-        button6.setPreferredSize(new Dimension(200,25));
-        button7.setPreferredSize(new Dimension(200,25));
+        final JButton button2 = new JButton("РЎРѕС…СЂР°РЅРёС‚СЊ РІ byte");
+        pbyttons.add(button2,  FlowLayout.LEFT);
+        final JButton button3 = new JButton("РЎРѕС…СЂР°РЅРёС‚СЊ РІ bin");
+        pbyttons.add(button3,  FlowLayout.LEFT);
+        final JButton button4 = new JButton("Р РµРєСѓСЂСЃРёРІРЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР°");
+        pbyttons.add(button4,  FlowLayout.LEFT);
+        final JButton button5 = new JButton("РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ bin РІ png");
+        pbyttons.add(button5,  FlowLayout.LEFT);
+        final JButton button6 = new JButton("РџСЂРµРѕР±СЂР°Р·РѕРІР°С‚СЊ byte РІ png");
+        pbyttons.add(button6,  FlowLayout.LEFT);
+        final JButton button7 = new JButton("РЎРѕС…СЂР°РЅРёС‚СЊ РєР°СЂС‚РёРЅРєСѓ РІ png");
+        pbyttons.add(button7,  FlowLayout.LEFT);
+        
+        final JButton button8 = new JButton("РќР°СЃС‚СЂРѕР№РєРё");
+        button0.setPreferredSize(new Dimension(200, 25));
+        button1.setPreferredSize(new Dimension(200, 25));
+        button2.setPreferredSize(new Dimension(200, 25));
+        button3.setPreferredSize(new Dimension(200, 25));
+        button4.setPreferredSize(new Dimension(200, 25));
+        button5.setPreferredSize(new Dimension(200, 25));
+        button6.setPreferredSize(new Dimension(200, 25));
+        button7.setPreferredSize(new Dimension(200, 25));
+        button8.setPreferredSize(new Dimension(200, 25));
 
 
         sbR = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
-        sbR.setBorder(new TitledBorder("Чувствительность красного"));
+        sbR.setBorder(new TitledBorder("Р§СѓРІСЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚СЊ РєСЂР°СЃРЅРѕРіРѕ"));
         sbG = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
-        sbG.setBorder(new TitledBorder("Чувствительность зеленого"));
+        sbG.setBorder(new TitledBorder("Р§СѓРІСЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚СЊ Р·РµР»РµРЅРѕРіРѕ"));
         sbB = new JSlider(JSlider.HORIZONTAL, 0, 255, 128);
-        sbB.setBorder(new TitledBorder("Чувствительность синего"));
+        sbB.setBorder(new TitledBorder("Р§СѓРІСЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚СЊ СЃРёРЅРµРіРѕ"));
         pbyttons.add(sbR, FlowLayout.LEFT);
         pbyttons.add(sbG, FlowLayout.LEFT);
         pbyttons.add(sbB, FlowLayout.LEFT);
-        fileChooser = new JFileChooser();
+        this.fileChooser = new JFileChooser();
         progressBar = new JProgressBar();
         panel1.add(progressBar,BorderLayout.SOUTH);
         progressBar.setStringPainted(true);        
-        //Слушатели кнопок
+        //РЎР»СѓС€Р°С‚РµР»Рё РєРЅРѕРїРѕРє
         button0.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {            	
                 e.getActionCommand();  
+                Starter.log.log(Level.INFO, "РћС‚СЂРёСЃРѕРІРєР° gui \"РРЅСЃС‚СЂРєСѓС†РёСЏ\"");
                 info(); 
             }
         }); 
-        //открыть файл
+        //РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р»
         button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {            	
                 e.getActionCommand();          
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                        "Картинки", "png", "jpg", "bmp","jpeg", "gif", "ico" );                
+                        "РљР°СЂС‚РёРЅРєРё", "png", "jpg", "bmp","jpeg", "gif", "ico" );                
                 fileChooser.setFileFilter(filter);
                 fileChooser.setCurrentDirectory(CoHexPo.getImputDirectiry());
                 JFileChooser.getDefaultLocale();
-                int ret = fileChooser.showDialog(null, "Открыть файл");               
+                int ret = fileChooser.showDialog(null, "РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»");               
                 if (ret == JFileChooser.APPROVE_OPTION) {
-                   File fileopened = fileChooser.getSelectedFile();
-                   try {
-                	   CoHexPo.filename = fileopened.getName();
-					CoHexPo.fileOpenToBuffer(fileopened);
-				} catch (IOException e1) {					
-					e1.printStackTrace();
-				}
-				updateImages();
+                   final File fileopened = fileChooser.getSelectedFile();                   
+                   Thread thr = new Thread()
+                   {
+                     public void run()
+                     {
+                       try
+                       {
+                         CoHexPo.filename = fileopened.getName();
+                         CoHexPo.fileOpenToBuffer(fileopened);
+                         Starter.log.log(Level.INFO, "РћС‚РєСЂС‹С‚ С„Р°Р№Р» - " + fileopened.getName());
+                       }
+                       catch (IOException e)
+                       {
+                         Starter.log.log(Level.ERROR, e);
+                       }
+                       Gui.updateImages();
+                     }
+                   };
+                   thr.start();
                 }
             }
         }); 
+        //Р‘СѓС„РµСЂ РІ Р±Р°Р№С‚РєРѕРґ(01101001)
         button2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {            	
-                e.getActionCommand();  
-                try {
-					CoHexPo.buffer2byte();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+            	Thread thr = new Thread()
+                {
+                  public void run()
+                  {
+                    try
+                    {
+                      Starter.log.log(Level.INFO, "Р—Р°РїСѓС‰РµРЅРѕ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р±СѓС„РµСЂР° РІ Р±Р°Р№С‚РєРѕРґ");
+                      CoHexPo.buffer2byte();
+                    }
+                    catch (IOException e)
+                    {
+                      Starter.log.log(Level.ERROR, e);
+                    }
+                  }
+                };
+                thr.start();
+                e.getActionCommand();
             }
         }); 
+      //Р‘СѓС„РµСЂ РІ Р±РёРЅ(РіРѕС‚РѕРІРѕ РґР»СЏ РїСЂРѕС€РёРІРєРё РІ РџР—РЈ)
         button3.addActionListener(new ActionListener() {        	
             public void actionPerformed(ActionEvent e) {            	
+            	Thread thr = new Thread()
+                {
+                  public void run()
+                  {
+                    try
+                    {
+                      Starter.log.log(Level.INFO, "Р—Р°РїСѓС‰РµРЅРѕ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р±СѓС„РµСЂР° РІ bin");
+                      CoHexPo.buffer2bin();
+                    }
+                    catch (IOException e)
+                    {
+                      Starter.log.log(Level.ERROR, e);
+                    }
+                  }
+                };
+                thr.start();
                 e.getActionCommand();
-                e.getModifiers();
-                try {
-					CoHexPo.buffer2bin();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}        
-              }
-        });  
-        button4.addActionListener(new ActionListener() {        	
-            public void actionPerformed(ActionEvent e) {            	
-                e.getActionCommand();
-                e.getModifiers();
-                Thread guruthread1 = new Thread();
-                guruthread1.start();
-                CoHexPo.initPONY();        
+                e.getModifiers();       
               }
         });
-        //из бинарника в картинку
+        //Р РµРєСѓСЂСЃРёРІРЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР° - РєРѕСЃС‚С‹Р»СЊ РЅР° РІРµР»РѕСЃРёРїРµРґРµ РёР· РєРѕСЃС‚С‹Р»РµР№
+        button4.addActionListener(new ActionListener() {        	
+            public void actionPerformed(ActionEvent e) {            	
+            	Thread thr = new Thread()
+                {
+                  public void run()
+                  {
+                    Starter.log.log(Level.INFO, "Р—Р°РїСѓС‰РµРЅР° СЂРµРєСѓСЂСЃРёРІРЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР°");
+                    CoHexPo.initPONY();
+                  }
+                };
+                thr.start();
+                e.getActionCommand();
+                e.getModifiers();     
+              }
+        });
+        //TODO РљСЃС‚Р°С‚Рё СЏ РїРѕРЅСЏР», С‡С‚Рѕ РїРѕС‚РѕРєРё С‚Рѕ СЏ РЅРµ Р·Р°РІРµСЂС€Р°СЋ) РћРЈРў РћР¤ РњР•РњРћР Р Р­Р”РРўРРћРќ! Р›Р°РґРЅРѕ, РїСЂРёС‚СЂРµС‚СЃСЏ!
+        //РёР· Р±РёРЅР°СЂРЅРёРєР° РІ РєР°СЂС‚РёРЅРєСѓ
         button5.addActionListener(new ActionListener() {        	
             public void actionPerformed(ActionEvent e) {            	
                 e.getActionCommand();
                 e.getModifiers();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Бинарные файлы", "bin" );                
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Р‘РёРЅР°СЂРЅС‹Рµ С„Р°Р№Р»С‹", "bin" );                
                 fileChooser.setFileFilter(filter);
                 fileChooser.setCurrentDirectory(CoHexPo.getOutputDirectiry());
                 JFileChooser.getDefaultLocale();
-                int ret = fileChooser.showDialog(null, "Открыть файл");                
+                int ret = fileChooser.showDialog(null, "РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»");                
                 if (ret == JFileChooser.APPROVE_OPTION) {
-                   File fileopened = fileChooser.getSelectedFile();
-                   try {
-					CoHexPo.bin2jpeg(fileopened);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				updateImages();  
+                   final File fileopened = fileChooser.getSelectedFile();
+                   Thread thr = new Thread()
+                   {
+                     public void run()
+                     {
+                       Starter.log.log(Level.INFO, "Р—Р°РїСѓС‰РµРЅРѕ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ bin РІ РєР°СЂС‚РёРЅРєСѓ");
+                       try
+                       {
+                         CoHexPo.bin2jpeg(fileopened);
+                       }
+                       catch (IOException e)
+                       {
+                         Starter.log.log(Level.ERROR, e);
+                       }
+                     }
+                   };
+                   thr.start();
 				}       
               }
         }); 
+        //Р’С‹Р±РѕСЂ С„Р°Р№Р»Р° СЃ Р±Р°Р№С‚РєРѕРґРѕРј
         button6.addActionListener(new ActionListener() {        	
             public void actionPerformed(ActionEvent e) {            	
             	e.getActionCommand();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("Байты", "byte" );                
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Р‘Р°Р№С‚С‹", "byte" );                
                 fileChooser.setFileFilter(filter);
                 fileChooser.setCurrentDirectory(CoHexPo.getOutputDirectiry());
                 JFileChooser.getDefaultLocale();
-                int ret = fileChooser.showDialog(null, "Открыть файл");                
+                int ret = fileChooser.showDialog(null, "РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»СЏСЏ");                
                 if (ret == JFileChooser.APPROVE_OPTION) {
-                   File fileopened = fileChooser.getSelectedFile();
-                   CoHexPo.bite2jpeg(fileopened);
-				updateImages();
+                   final File fileopened = fileChooser.getSelectedFile();
+                   Thread thr = new Thread()
+                   {
+                     public void run()
+                     {                      
+                       Starter.log.log(Level.INFO, "Р—Р°РїСѓС‰РµРЅРѕ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ Р±Р°Р№С‚РєРѕРґР° РІ РєР°СЂС‚РёРЅРєСѓ");
+                       CoHexPo.bite2jpeg(fileopened);
+                     }
+                   };
+                   thr.start();
 				}    
               }
         });
-        
+        //РЎРѕС…СЂР°РЅРµРЅРёРµ РєР°СЂС‚РёРЅРєРё
         button7.addActionListener(new ActionListener() {        	
             public void actionPerformed(ActionEvent e) {            	
                 e.getActionCommand();
@@ -212,43 +308,62 @@ public class Gui extends JFrame{
                 fileChooser.setFileFilter(filter);
                 fileChooser.setCurrentDirectory(CoHexPo.getOutputDirectiry());                
                 JFileChooser.getDefaultLocale();
-                int ret = fileChooser.showDialog(null, "Сохранить картинку");
+                int ret = fileChooser.showDialog(null, "РЎРѕС…СЂР°РЅРёС‚СЊ РєР°СЂС‚РёРЅРєСѓ");
                 if (ret == JFileChooser.APPROVE_OPTION) {                 	
                 	File filesaved = fileChooser.getSelectedFile();
-                    try {
-						CoHexPo.savepng(filesaved);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+                	 try
+                     {
+                       Starter.log.log(Level.INFO, "РЎРѕС…СЂР°РЅСЏРµРј С„Р°Р№Р» - " + filesaved);
+                       CoHexPo.savepng(filesaved);
+                     }
+                     catch (IOException e1)
+                     {
+                       Starter.log.log(Level.ERROR, e1);
+                     }
                 	
                 }
               }
         });  
+       //РњРµРЅСЋ РЅР°СЃС‚СЂРѕРµРє
+        button8.addActionListener(new ActionListener()
+        {
+          public void actionPerformed(ActionEvent e)
+          {
+            e.getActionCommand();
+            Starter.log.log(Level.INFO, "РћС‚СЂРёСЃРѕРІРєР° gui \"РќР°СЃС‚СЂРѕР№РєРё\"");
+            Gui.this.settungs();
+          }
+        });
+        //РµС‰Рµ СЌР»РµРјРµРЅС‚С‹
+        
+        
         originalImage = CoHexPo.getInBuffer();
-        
-        ioimage = new JLabel("Результат");
-        pou.add(ioimage,BorderLayout.SOUTH);
-        ioimage.setIcon(new ImageIcon(originalImage));      
-        
-                   
-        frame.getContentPane().add(panel1); 
-        frame.setPreferredSize(new Dimension(580, 435));        
+        gigasreenImage = CoHexPo.getGinBuffer();
+        gioimage = new JLabel();
+        ioimage = new JLabel();
+        pou.setBorder(new TitledBorder("Р РµР·СѓР»СЊС‚Р°С‚"));
+        pou.add(button8, 0);
+        pou.add(ioimage, 1);
+        pou.add(gioimage, 1);
+        gioimage.setIcon(new ImageIcon(gigasreenImage));
+        ioimage.setIcon(new ImageIcon(originalImage));
+        frame.getContentPane().add(panel1);
+        frame.setPreferredSize(new Dimension(this.X, this.Y));
         frame.pack();
-        frame.setVisible(true);    
+        frame.setVisible(true);   
         return;
 	}
 	 
 		public void info(){				
 			JFrame.setDefaultLookAndFeelDecorated(false);			
-			JFrame frame = new JFrame("Информация");
+			JFrame frame = new JFrame("РРЅС„РѕСЂРјР°С†РёСЏ");
 			JTextArea area = new JTextArea(15, 10);
-	        area.setText("Инструкция:" +ls
-					+ " Кнопка «Открыть файл», открывает файл для одиночной обработки. "+ls
-					+ " Кнопка «Рекурсивная обработка», берет файлы из папки imputs и готовые помещает в папку outputs. "+ls
-					+ " Кнопка «Сохранить байткод» создает файл с содержимым 0000RGBY. "+ls
-					+ " Кнопка «Сохранить в hex» создает бинарный файл с данными. "+ls
-					+ " Внимание! Все кнопки, кроме рекурсии, работают исключительно с одним файлом, который надо выбрать с помощью кнопки «Открыть файл»");	        
+	        area.setText("РРЅСЃС‚СЂСѓРєС†РёСЏ:" +ls
+					+ " РљРЅРѕРїРєР° В«РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»В», РѕС‚РєСЂС‹РІР°РµС‚ С„Р°Р№Р» РґР»СЏ РѕРґРёРЅРѕС‡РЅРѕР№ РѕР±СЂР°Р±РѕС‚РєРё. "+ls
+					+ " РљРЅРѕРїРєР° В«Р РµРєСѓСЂСЃРёРІРЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР°В», Р±РµСЂРµС‚ С„Р°Р№Р»С‹ РёР· РїР°РїРєРё imputs Рё РіРѕС‚РѕРІС‹Рµ РїРѕРјРµС‰Р°РµС‚ РІ РїР°РїРєСѓ outputs. "+ls
+					+ " РљРЅРѕРїРєР° В«РЎРѕС…СЂР°РЅРёС‚СЊ Р±Р°Р№С‚РєРѕРґВ» СЃРѕР·РґР°РµС‚ С„Р°Р№Р» СЃ СЃРѕРґРµСЂР¶РёРјС‹Рј 0000RGBY. "+ls
+					+ " РљРЅРѕРїРєР° В«РЎРѕС…СЂР°РЅРёС‚СЊ РІ hexВ» СЃРѕР·РґР°РµС‚ Р±РёРЅР°СЂРЅС‹Р№ С„Р°Р№Р» СЃ РґР°РЅРЅС‹РјРё. "+ls
+					+ " Р’РЅРёРјР°РЅРёРµ! Р’СЃРµ РєРЅРѕРїРєРё, РєСЂРѕРјРµ СЂРµРєСѓСЂСЃРёРё, СЂР°Р±РѕС‚Р°СЋС‚ РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅРѕ СЃ РѕРґРЅРёРј С„Р°Р№Р»РѕРј, РєРѕС‚РѕСЂС‹Р№ РЅР°РґРѕ РІС‹Р±СЂР°С‚СЊ СЃ РїРѕРјРѕС‰СЊСЋ РєРЅРѕРїРєРё В«РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р»В»");	        
 	        area.setLineWrap(true);
 	        area.setWrapStyleWord(true);	     
 	        frame.getContentPane().add(area);			
@@ -256,16 +371,36 @@ public class Gui extends JFrame{
 	        frame.pack();
 	        frame.setVisible(true);	        
 		}
+		
+		public void settungs()
+		  {
+		    JFrame.setDefaultLookAndFeelDecorated(false);
+		    JFrame frame = new JFrame("РРЅС„РѕСЂРјР°С†РёСЏ");
+		    bite0 = new JCheckBox("Р—Р°РїРѕР»РЅРµРЅРёРµ РЅСѓР»СЏРјРё");
+		    sysdecor = new JCheckBox("РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ СЃС‚РёР»СЏ СЃРёСЃС‚РµРјС‹");
+		    swingdecor = new JCheckBox("РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ СЃС‚РёР»РµР№ Swing");
+		    JPanel pp = new JPanel();
+		    pp.add(bite0);
+		    pp.add(sysdecor);
+		    pp.add(swingdecor);
+		    
+		    frame.getContentPane().add(pp);
+		    frame.setPreferredSize(new Dimension(this.X, this.Y));
+		    frame.pack();
+		    frame.setVisible(true);
+		  }
 		public static void updateImages() {	
-			
 			panel1.revalidate();
-			panel1.repaint();	
+			panel1.repaint();
 			originalImage = CoHexPo.getInBuffer();
-			if(originalImage!=null) {
-			ioimage.setIcon(new ImageIcon(originalImage));
+			gigasreenImage = CoHexPo.getGinBuffer();
+			if (gigasreenImage != null) {
+			   gioimage.setIcon(new ImageIcon(gigasreenImage));
 			}
-			System.out.println("repaint");
-			
+			if (originalImage != null) {
+			   ioimage.setIcon(new ImageIcon(originalImage));
+			}
+			Starter.log.log(Level.INFO, "РћР±РЅРѕРІР»РµРЅРёРµ GUI");			
 		}
 	
 		public static void updateBar(int max, int value) {

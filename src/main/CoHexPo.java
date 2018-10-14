@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,9 +14,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
+
+import org.apache.logging.log4j.Level;
+
 import net.sf.image4j.util.ConvertUtil;
 
 
@@ -24,7 +30,7 @@ public class CoHexPo extends Thread {
 	public void run() {
 		System.out.println("gjnjr");
     }
-	//системные переменные	
+	//СЃРёСЃС‚РµРјРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ	
 	public static String fileSeparator = System.getProperty("file.separator");
 	public static String ls = System.getProperty("line.separator");
 	private static String imputs = "imput";
@@ -33,23 +39,24 @@ public class CoHexPo extends Thread {
 	private static File ouputfolder;
 	private static String nuli = "00000000";
 	public static String filename = "default";
-	//главный буфер изображения
+	//РіР»Р°РІРЅС‹Р№ Р±СѓС„РµСЂ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 	private static BufferedImage inimage;
-	//Вспомогательный буфер
+	//Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Р№ Р±СѓС„РµСЂ
 	private static BufferedImage outimage;
 	static String[] wii;
 	static int Ni =0;
 	private static BufferedImage bi;
-	//начнем с папок и файлов	
+	private static BufferedImage inimageG;
+	//РЅР°С‡РЅРµРј СЃ РїР°РїРѕРє Рё С„Р°Р№Р»РѕРІ	
 	public static void preinitPONY() {
-	//Создадим папки для входа
+	//РЎРѕР·РґР°РґРёРј РїР°РїРєРё РґР»СЏ РІС…РѕРґР°
 	imputfolder = new File(System.getProperty("user.dir") + fileSeparator + imputs );
 	imputfolder.mkdir();
-	//то же самое, но для выхода
+	//С‚Рѕ Р¶Рµ СЃР°РјРѕРµ, РЅРѕ РґР»СЏ РІС‹С…РѕРґР°
 	ouputfolder = new File(System.getProperty("user.dir") + fileSeparator + outputs);
 	ouputfolder.mkdir();	
 	}
-	//Преобразование данных из главного буфера в bin
+	//РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РґР°РЅРЅС‹С… РёР· РіР»Р°РІРЅРѕРіРѕ Р±СѓС„РµСЂР° РІ bin
 	public static void buffer2bin() throws IOException {
 				int n =0;
 				int height = 0;
@@ -63,25 +70,25 @@ public class CoHexPo extends Thread {
 				int gGb = 0;
 				int gYb = 0;
 				if(inimage != null) {
-					//Получим параметры изображения
+					//РџРѕР»СѓС‡РёРј РїР°СЂР°РјРµС‚СЂС‹ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 					height = inimage.getHeight();
 					width = inimage.getWidth();
 					byte[] bytej =  new byte[height*width];
-					//пересоздадим файл
+					//РїРµСЂРµСЃРѕР·РґР°РґРёРј С„Р°Р№Р»
 				    File outputfile = new File(ouputfolder + fileSeparator + filename + ".bin" );
 	         	    System.out.println(outputfile);		            	  
 	         	    outputfile.delete();
 	         	    outputfile.createNewFile();
-					//теперь цикл попиксельного чтения этого говнища по строкам
+					//С‚РµРїРµСЂСЊ С†РёРєР» РїРѕРїРёРєСЃРµР»СЊРЅРѕРіРѕ С‡С‚РµРЅРёСЏ СЌС‚РѕРіРѕ РіРѕРІРЅРёС‰Р° РїРѕ СЃС‚СЂРѕРєР°Рј
 					for (int hh=0; hh<height; hh++) {
-						//то же говно, но по пикселям каждой строки нахуй!
+						//С‚Рѕ Р¶Рµ РіРѕРІРЅРѕ, РЅРѕ РїРѕ РїРёРєСЃРµР»СЏРј РєР°Р¶РґРѕР№ СЃС‚СЂРѕРєРё РЅР°С…СѓР№!
 						for (int ww=0; ww<width; ww++) {
-							//обработка сраных пикселей
+							//РѕР±СЂР°Р±РѕС‚РєР° СЃСЂР°РЅС‹С… РїРёРєСЃРµР»РµР№
 							Color pixels = new Color(inimage.getRGB(ww, hh));
 							int R = pixels.getRed();
 							int G = pixels.getGreen();
 							int B = pixels.getBlue();
-							//обновяем переменные
+							//РѕР±РЅРѕРІСЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ
 				               Rb = 0;
 				               Gb = 0;
 				               Bb = 0;
@@ -100,10 +107,10 @@ public class CoHexPo extends Thread {
 				            	   Yb = 0;
 				               if(gBb==0 && gRb ==0 && gGb == 0)
 				            	   gYb = 0;
-				             //формируем байт
+				             //С„РѕСЂРјРёСЂСѓРµРј Р±Р°Р№С‚
 				               String bait = String.valueOf(gRb) + String.valueOf(gGb) + String.valueOf(gBb) + String.valueOf(gYb) + String.valueOf(Rb)
 				               + String.valueOf(Gb) + String.valueOf(Bb) + String.valueOf(Yb);			             
-			                //формирование байтов - хуяйтов
+			                //С„РѕСЂРјРёСЂРѕРІР°РЅРёРµ Р±Р°Р№С‚РѕРІ - С…СѓСЏР№С‚РѕРІ
 				               System.out.println(bytej.length);       
 				               
 							bytej [n] = getByteByString(bait)[0];
@@ -120,7 +127,7 @@ public class CoHexPo extends Thread {
 				}
 	}
 	
-	//Преобразование данных из главного буффера в байт(00001111)
+	//РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РґР°РЅРЅС‹С… РёР· РіР»Р°РІРЅРѕРіРѕ Р±СѓС„С„РµСЂР° РІ Р±Р°Р№С‚(00001111)
 		public static void buffer2byte() throws IOException {			
 			int height = 0;
 			int width = 0;
@@ -133,27 +140,27 @@ public class CoHexPo extends Thread {
 			int gGb = 0;
 			int gYb = 0;
 			if(inimage != null) {
-				//Получим параметры изображения
+				//РџРѕР»СѓС‡РёРј РїР°СЂР°РјРµС‚СЂС‹ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 				height = inimage.getHeight();
 				width = inimage.getWidth();				
-				//пересоздадим файл
+				//РїРµСЂРµСЃРѕР·РґР°РґРёРј С„Р°Р№Р»
 			    File outputfile = new File(ouputfolder + fileSeparator + filename + ".byte" );
          	    System.out.println(outputfile);		            	  
          	    outputfile.delete();
          	    outputfile.createNewFile();
          	   System.out.println("height= " +height);
       		   System.out.println("width= " +width);
-				//теперь цикл попиксельного чтения этого говнища по строкам
+				//С‚РµРїРµСЂСЊ С†РёРєР» РїРѕРїРёРєСЃРµР»СЊРЅРѕРіРѕ С‡С‚РµРЅРёСЏ СЌС‚РѕРіРѕ РіРѕРІРЅРёС‰Р° РїРѕ СЃС‚СЂРѕРєР°Рј
 				for (int hh=0; hh<=height-1;hh++) {
-					//то же говно, но по пикселям каждой строки нахуй!
+					//С‚Рѕ Р¶Рµ РіРѕРІРЅРѕ, РЅРѕ РїРѕ РїРёРєСЃРµР»СЏРј РєР°Р¶РґРѕР№ СЃС‚СЂРѕРєРё РЅР°С…СѓР№!
 					for (int ww=0; ww<=width-1; ww++) {
-						//обработка сраных пикселей
+						//РѕР±СЂР°Р±РѕС‚РєР° СЃСЂР°РЅС‹С… РїРёРєСЃРµР»РµР№
 						Color pixels = new Color(inimage.getRGB(ww, hh));
 						
 						int R = pixels.getRed();
 						int G = pixels.getGreen();
 						int B = pixels.getBlue();
-						//обновяем переменные
+						//РѕР±РЅРѕРІСЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ
 			               Rb =0;
 			               Gb = 0;
 			               Bb = 0;
@@ -185,7 +192,7 @@ public class CoHexPo extends Thread {
 		                   	}else {
 		                   		Ni = 0;
 		                   	 writer.write(ls);
-		                   	//последний элемент строки + 24 бита хуйни	
+		                   	//РїРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚ СЃС‚СЂРѕРєРё + 24 Р±РёС‚Р° С…СѓР№РЅРё	
 		                   //		writer.write(bait+"|");
 		                   	for (int zz=0; zz<23; zz++) {
 		                  // 		writer.write(nuli+"|");
@@ -205,12 +212,12 @@ public class CoHexPo extends Thread {
 			}
 		}
 		
-		//конвертер из String
+		//РєРѕРЅРІРµСЂС‚РµСЂ РёР· String
 	public static byte[] getByteByString(String byteString){
 		    return new BigInteger(byteString, 2).toByteArray();
 		}
 		
-	//рекурсивное преобразование. нам не нужно пока
+	//СЂРµРєСѓСЂСЃРёРІРЅРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ. РЅР°Рј РЅРµ РЅСѓР¶РЅРѕ РїРѕРєР°
 	public static void initPONY() {
 		int height = 0;
 		int width = 0;
@@ -219,9 +226,9 @@ public class CoHexPo extends Thread {
 		int Gb = 0;
 		int Yb = 0;
 		
-		//Проверяем наличие файлов(генеальный код)		
+		//РџСЂРѕРІРµСЂСЏРµРј РЅР°Р»РёС‡РёРµ С„Р°Р№Р»РѕРІ(РіРµРЅРµР°Р»СЊРЅС‹Р№ РєРѕРґ)		
 		try { 
-	         // Массив файлов и папок
+	         // РњР°СЃСЃРёРІ С„Р°Р№Р»РѕРІ Рё РїР°РїРѕРє
 			String[] filepatch = imputfolder.list();
 
 	         for(String path:filepatch) {
@@ -230,14 +237,14 @@ public class CoHexPo extends Thread {
 	     		BufferedImage bi8 = ConvertUtil.convert8(bi);
 	     		height = bi8.getHeight();
 	     		width = bi8.getWidth();	 
-	     		//вы думали, что самое веселое кончилось? Так нет! Вот корень зла!
+	     		//РІС‹ РґСѓРјР°Р»Рё, С‡С‚Рѕ СЃР°РјРѕРµ РІРµСЃРµР»РѕРµ РєРѕРЅС‡РёР»РѕСЃСЊ? РўР°Рє РЅРµС‚! Р’РѕС‚ РєРѕСЂРµРЅСЊ Р·Р»Р°!
 	     		for (int xx=0; xx<height; xx++) {
 		               for (int yy=0; yy<width; yy++) {
 		            	   Color cp = new Color(bi8.getRGB(yy, xx));		            	  
 			               int R = cp.getRed();
 			               int B = cp.getBlue();
 			               int G = cp.getGreen();
-			               //обнуляем переменные
+			               //РѕР±РЅСѓР»СЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ
 			               Rb =0;
 			               Gb = 0;
 			               Bb = 0;
@@ -256,18 +263,18 @@ public class CoHexPo extends Thread {
 			              
 		            	   
 		            	   String bait = "0000" + Rb + Gb + Bb + Yb;
-		            	   //запись в файл
+		            	   //Р·Р°РїРёСЃСЊ РІ С„Р°Р№Р»
 		            	   File outputfile = new File(ouputfolder + fileSeparator + path );
 		                   BufferedWriter writer = new BufferedWriter(new FileWriter(outputfile + ".txt" , true));
 		                   
 		                 //  System.out.println(bait);
-		                   		                   	//строка полезной инфы = 40
+		                   		                   	//СЃС‚СЂРѕРєР° РїРѕР»РµР·РЅРѕР№ РёРЅС„С‹ = 40
 		                   	if(Ni<39) {
 		                   		Ni++;
 		                   		writer.write(bait);
 		                   		
 		                   	}else {
-		                   	//последний элемент строки + 24 бита хуйни	
+		                   	//РїРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚ СЃС‚СЂРѕРєРё + 24 Р±РёС‚Р° С…СѓР№РЅРё	
 		                   		writer.write(bait);
 		                   	for (int zz=0; zz<23; zz++) {
 		                   		writer.write("00000000");
@@ -293,7 +300,7 @@ public class CoHexPo extends Thread {
 
 
 	public static String ToHex(String s){
-		System.out.println("байткод" + s);
+		System.out.println("Р±Р°Р№С‚РєРѕРґ" + s);
 		
 		BigInteger b= new BigInteger(s,2);
 		String	a = String.format("%2s", b.toString(16)).replace(' ', '0');
@@ -310,13 +317,13 @@ public class CoHexPo extends Thread {
 		bi = new BufferedImage(66,225,BufferedImage.TYPE_INT_RGB);
 		
 		 byte[] bytes = new byte[(int) fileopened.length()];
-	             // Получаем массив байт
+	             // РџРѕР»СѓС‡Р°РµРј РјР°СЃСЃРёРІ Р±Р°Р№С‚
 		 int hight = 1;
     	 int widht = 1;
 	            try (FileInputStream fis  = new FileInputStream(fileopened)) {
 	                fis.read(bytes);
 	             for(int z=0; z<fileopened.length();z++) {
-	            	// System.out.println("байты" + bytes[z]);
+	            	// System.out.println("Р±Р°Р№С‚С‹" + bytes[z]);
 	            	
 	            	 StringBuilder ret  = new StringBuilder();
 	            	 byte b = bytes[z]; 
@@ -407,7 +414,7 @@ public class CoHexPo extends Thread {
 	            	int G = 0;
 	            	int B = 0;	            
 	            	String ss = wii[widht-1];
-	         
+	         //РІС‹ РЅР° СЌС‚РѕС‚ РїРёР·РґРµС† РЅРµ СЃРјРѕС‚СЂРёС‚Рµ, РІ С„РёРЅР°Р»СЊРЅРѕР№ РІРµСЂСЃРёРё РїСЂРѕРіСЂР°РјРјС‹ РІСЃРµ Р±С‹Р»Рѕ СЃРґРµР»Р°РЅРѕ РЅРѕСЂРјР°Р»СЊРЅРѕ. РЇ РІРµРґСЊ РЅРµ РѕР¶РёРґР°Р», С‡С‚Рѕ РјРѕР№ С…Р°СЂРґ РЅР°РєСЂРѕРµС‚СЃСЏ.
 	            	switch (ss) {
 	            	case "00001111":
 	            		R = 255;
@@ -468,48 +475,81 @@ public class CoHexPo extends Thread {
 	          
 	            }
 	        } catch (IOException e) {
-	            
+	        	Starter.log.log(Level.ERROR, e);   
 	        }
 	}
 
-//получение директории сохранения
+//РїРѕР»СѓС‡РµРЅРёРµ РґРёСЂРµРєС‚РѕСЂРёРё СЃРѕС…СЂР°РЅРµРЅРёСЏ
 	public static File getOutputDirectiry() {		
 		return ouputfolder;
 	}
-//получение директории входных файлов
+//РїРѕР»СѓС‡РµРЅРёРµ РґРёСЂРµРєС‚РѕСЂРёРё РІС…РѕРґРЅС‹С… С„Р°Р№Р»РѕРІ
 	public static File getImputDirectiry() {
 		return imputfolder;
 	}
 
-//загрузка картинки в главный буфер.
+//Р·Р°РіСЂСѓР·РєР° РєР°СЂС‚РёРЅРєРё РІ РіР»Р°РІРЅС‹Р№ Р±СѓС„РµСЂ.
 	public static void fileOpenToBuffer(File fileopened) throws IOException {
-		BufferedImage buf = ImageIO.read( fileopened );
-		inimage = buf;
-		System.out.println("размеры файла" + fileopened);
+		BufferedImage buf = ImageIO.read(fileopened);
+	    inimage = buf;
+	    File fileopenedG = new File(fileopened.getParentFile() + fileSeparator + fileopened.getName().replaceFirst("[.][^.]+$", "") + "_2." + fileopened.getName().replaceAll("^.*\\.(.*)$", "$1"));
+	    BufferedImage bug = ImageIO.read(fileopenedG);
+	    inimageG = bug;
+	    Starter.log.log(Level.INFO, "Р¤Р°Р№Р» РѕС‚РєСЂС‹С‚ - " + fileopened);
 		
 	}
-//загрузка картинки в буффер, при старте программы
-	public static BufferedImage getInBuffer() {
-		if (inimage==null) {
-			BufferedImage bi;
-			try {
-				bi = ImageIO.read( new File( imputfolder+fileSeparator + "pony3.bmp"));
-				inimage = bi;
-			} catch (IOException e) {				
-				e.printStackTrace();
-			}
-			
-		}else {
-			return inimage;	
-	}
-	return inimage;		
+//РЇ РЅРµ РїРѕРјРЅСЋ Р·Р°С‡РµРј СЌС‚Рѕ, Р°Р·Р±РµСЂСѓСЃСЊ РїРѕР·Р¶Рµ	
+  Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/assets/images/ponyI.png"));	
 	
+//РџР°РїРєР° Assets! РљР°Рє РІ РјР°Р№РЅСЃСЂСѓС„С‚Рµ
+	URL geti()
+	  {
+	    URL image = getClass().getResource("/assets/images/default.png");
+	    return image;
+	  }
+//Р·Р°РіСЂСѓР·РєР° РєР°СЂС‚РёРЅРєРё РІ Р±СѓС„С„РµСЂ, РїСЂРё СЃС‚Р°СЂС‚Рµ РїСЂРѕРіСЂР°РјРјС‹
+	public static BufferedImage getInBuffer() {
+		if (inimage == null) {
+		      try
+		      {
+		        CoHexPo cc = new CoHexPo();
+		        BufferedImage bi = ImageIO.read(cc.geti());
+		        inimage = bi;
+		      }
+		      catch (IOException e)
+		      {
+		        Starter.log.log(Level.ERROR, e);
+		      }
+		    } else {
+		      return inimage;
+		    }
+		    return inimage;
 }
-//Получение дополнительного буфера изображений
+	//Р’С‹ Р·РІРјРµС‚РёР»Рё, С‡С‚Рѕ Р·РґРµСЃСЊ РјРЅРѕРіРѕ РєРѕРїРёРїР°СЃС‚С‹ Рё РјРѕР¶РЅРѕ Р±С‹Р»Рѕ СЃРґРµР»Р°С‚СЊ РїСЂРѕС‰Рµ?
+	//РљСЃС‚Р°С‚Рё РўСѓС‚ СЏ СЃР»РѕРІРёР» С„Р»РµС€Р±РµРє Рє РіРёРЅС‚Р°РјРµ... РЎС‚Р°РЅРЅРѕ...
+	public static BufferedImage getGinBuffer()
+	  {
+	    if (inimageG == null) {
+	      try
+	      {
+	        CoHexPo cc = new CoHexPo();
+	        BufferedImage bi = ImageIO.read(cc.geti());
+	        inimageG = bi;
+	      }
+	      catch (IOException e)
+	      {
+	        Starter.log.log(Level.ERROR, e);
+	      }
+	    } else {
+	      return inimageG;
+	    }
+	    return inimageG;
+	  }
+//РџРѕР»СѓС‡РµРЅРёРµ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРіРѕ Р±СѓС„РµСЂР° РёР·РѕР±СЂР°Р¶РµРЅРёР№
 	public static BufferedImage getOutBuffer() {
 		return outimage;
 }
-
+//РЎРѕС…СЂР°РЅРµРЅРёРµ РєР°СЂС‚РёРЅРєРё
 	public static void savepng(File filesaved) throws IOException {		
 		ImageIO.write(inimage, "png", filesaved);
 		
